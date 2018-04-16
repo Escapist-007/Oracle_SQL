@@ -211,7 +211,7 @@
        ROUND( AVG(SAL) OVER (PARTITION BY DEPTNO), 2) AS "Avg Sal by Department"
     FROM   EMP;
 
-
+   
 
 
 
