@@ -110,3 +110,33 @@
 
 */
 
+
+    ----    RANK(), DENSE_RANK() and ROW_NUMBER()    -----
+    
+    CREATE TABLE temp (
+      ID NUMBER,
+      NAME VARCHAR2(20)
+    );
+    
+    INSERT INTO temp VALUES (5, '*');
+    INSERT INTO temp VALUES (2, '*');
+    INSERT INTO temp VALUES (5, '*');
+    INSERT INTO temp VALUES (3, '*');
+    INSERT INTO temp VALUES (5, '*');
+    INSERT INTO temp VALUES (3, '*');
+    INSERT INTO temp VALUES (2, '*');
+    INSERT INTO temp VALUES (4, '#');
+    INSERT INTO temp VALUES (8, '#');
+    INSERT INTO temp VALUES (4, '#');
+    INSERT INTO temp VALUES (8, '#');
+    INSERT INTO temp VALUES (4, '#');
+    
+    SELECT * FROM temp;
+    
+    SELECT
+      ID, NAME,
+      DENSE_RANK ( ) OVER ( PARTITION BY NAME ORDER BY ID ) dense_ranking,
+      RANK ( ) OVER ( PARTITION BY NAME ORDER BY ID ) ranking,
+      ROW_NUMBER ( ) OVER ( PARTITION BY NAME ORDER BY ID ) row_number
+    FROM
+      temp;
