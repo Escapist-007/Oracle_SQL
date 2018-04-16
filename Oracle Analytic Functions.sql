@@ -210,8 +210,48 @@
        ROUND( AVG(SAL) OVER () ) AS "Avg Sal of all employees",
        ROUND( AVG(SAL) OVER (PARTITION BY DEPTNO), 2) AS "Avg Sal by Department"
     FROM   EMP;
+    
 
-   
+                                --    #############               FIRST_VALUE ( )      ###############
+
+  /*
+    The order_by_clause is used to order rows, or siblings, within a partition. 
+    So, if an analytic function is sensitive to the order of the siblings in a partition you should include an order_by_clause. 
+    The following query uses the FIRST_VALUE function to return the first salary reported in each department.
+    
+  */
+    
+    SELECT EMPNO, 
+           DEPTNO, 
+           SAL, 
+           FIRST_VALUE(SAL IGNORE NULLS) OVER (PARTITION BY DEPTNO) AS FIRST_SAL_IN_DEPT_UNORDER
+    FROM   EMP
+    WHERE DEPTNO = 10;
+    
+    
+    SELECT EMPNO, 
+           DEPTNO, 
+           SAL, 
+           FIRST_VALUE(SAL IGNORE NULLS) OVER (PARTITION BY DEPTNO ORDER BY SAL ASC NULLS LAST) AS FIRST_SAL_IN_DEPT_ORDER
+    FROM   EMP
+    WHERE DEPTNO = 10;
+    
+    
+    -- SEE THE OUTPUT CAREFULLY :D .  Ordering is same for the first_value()  
+    
+    SELECT EMPNO, 
+           DEPTNO, 
+           SAL, 
+           FIRST_VALUE(SAL IGNORE NULLS) OVER (PARTITION BY DEPTNO) AS FIRST_SAL_IN_DEPT_UNORDER,
+           FIRST_VALUE(SAL IGNORE NULLS) OVER (PARTITION BY DEPTNO ORDER BY SAL ASC NULLS LAST) AS FIRST_SAL_IN_DEPT_ORDER
+    FROM   EMP
+    WHERE DEPTNO = 10;
+    
+    
+  /*
+    In this case the "ASC NULLS LAST" keywords are unnecessary as ASC is the default for an order_by_clause and NULLS LAST is the default for ASC orders. 
+    When ordering by DESC, the default is NULLS FIRST.
+  */
 
 
 
