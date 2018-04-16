@@ -140,3 +140,75 @@
       ROW_NUMBER ( ) OVER ( PARTITION BY NAME ORDER BY ID ) row_number
     FROM
       temp;
+      
+
+  /*  
+    EMP and DEPT tables.  Classic Oracle tables with 4 departments and 14 employees. 
+    The DDL scripts are taken from the Oracle Code Library 
+  */
+
+   Create
+    Table DEPT
+    (
+      Deptno Number ( 2, 0 ),
+      Dname  Varchar2 ( 14 ),
+      Loc    Varchar2 ( 13 ),
+      
+      Constraint Pk_Dept Primary Key ( Deptno )
+    );
+
+
+   CREATE
+    TABLE EMP
+    (
+      EMPNO    NUMBER ( 4, 0 ),
+      ENAME    VARCHAR2 ( 10 ),
+      JOB      VARCHAR2 ( 9 ),
+      MGR      NUMBER ( 4, 0 ),
+      HIREDATE DATE,
+      SAL      NUMBER ( 7, 2 ),
+      COMM     NUMBER ( 7, 2 ),
+      DEPTNO   NUMBER ( 2, 0 ),
+      
+      CONSTRAINT PK_EMP PRIMARY KEY ( EMPNO ),
+      CONSTRAINT FK_DEPTNO FOREIGN KEY ( DEPTNO ) REFERENCES DEPT ( DEPTNO )
+    );
+
+  -- Populate Dept table
+
+   INSERT ALL 
+     INTO dept (deptno, dname, loc) VALUES(10, 'ACCOUNTING', 'NEW YORK')  /* Insert row into DEPT table using named columns. */
+     INTO dept VALUES(20, 'RESEARCH', 'DALLAS')                           /* Insert a row into DEPT table by column position.*/
+     INTO dept VALUES(30, 'SALES', 'CHICAGO')
+     INTO dept VALUES(40, 'OPERATIONS', 'BOSTON')
+   SELECT * FROM dual;
+
+  -- Populate EMP table
+  
+    INSERT ALL
+     into emp  values( 7839, 'KING', 'PRESIDENT', null,  to_date('17-11-1981','dd-mm-yyyy'),  5000, null, 10  )
+     into emp  values( 7698, 'BLAKE', 'MANAGER', 7839,   to_date('01-05-1981','dd-mm-yyyy'),  2850, null, 30  )
+     into emp  values( 7782, 'CLARK', 'MANAGER', 7839,   to_date('09-06-1981','dd-mm-yyyy'),  2450, null, 10  )
+     into emp  values( 7566, 'JONES', 'MANAGER', 7839,   to_date('02-04-1981','dd-mm-yyyy'),  2975, null, 20  )
+     into emp  values( 7788, 'SCOTT', 'ANALYST', 7566,   to_date('13-JUL-87','dd-mm-rr')-85,  3000, null, 20  )
+     into emp  values( 7902, 'FORD',  'ANALYST', 7566,   to_date('03-12-1981','dd-mm-yyyy'),  3000, null, 20  )
+     into emp  values( 7369, 'SMITH',   'CLERK', 7902,   to_date('17-12-1980','dd-mm-yyyy'),  0800, null, 20  )
+     into emp  values( 7499, 'ALLEN','SALESMAN', 7698,   to_date('20-02-1981','dd-mm-yyyy'),  1600, 300,  30  )
+     into emp  values( 7521, 'WARD', 'SALESMAN', 7698,   to_date('22-02-1981','dd-mm-yyyy'),  1250, 500,  30  )
+     into emp  values( 7654, 'MARTIN','SALESMAN',7698,   to_date('28-09-1981','dd-mm-yyyy'),  1250, 1400, 30  )
+     into emp  values( 7844, 'TURNER','SALESMAN',7698,   to_date('08-09-1981','dd-mm-yyyy'),  1500, 0,    30  )
+     into emp  values( 7876, 'ADAMS',   'CLERK', 7788,   to_date('13-JUL-87', 'dd-mm-rr')-51, 1100, null, 20  )
+     into emp  values( 7900, 'JAMES',   'CLERK', 7698,   to_date('03-12-1981','dd-mm-yyyy'),  950,  null, 30  )
+     into emp  values( 7934, 'MILLER',  'CLERK', 7782,   to_date('23-01-1982','dd-mm-yyyy'),  1300, null, 10  )
+     into emp  values( 7930, 'MONIR',  'ADE', 7782,   to_date('23-01-2017','dd-mm-yyyy'),  null, null, 10  )
+    SELECT * FROM dual;
+
+
+
+
+
+
+
+
+
+
