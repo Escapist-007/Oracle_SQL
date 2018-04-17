@@ -7,7 +7,8 @@
 
 /*                                   ~~~~~~~~~~~~~~~ CORR() ~~~~~~~~~~~~~
  
- * The Oracle CORR() function calculates the Pearson's correlation coefficient (r), which is the coefficient of correlation of a set of    number pairs. It can be used as an aggregate or analytic function.
+ * The Oracle CORR() function calculates the Pearson's correlation coefficient (r), which is the coefficient of correlation of a set of number pairs. 
+   It can be used as an aggregate or analytic function.
    
  * Pearson's correlation coefficient reflects the degree of linear relationship between two variables. It ranges from +1 to -1.
  
@@ -48,7 +49,7 @@
   -- ASSOCIATION BETWEEN SALARY & COMMISSION IN EACH DEPARTMENT
   
     SELECT
-      E.DEPARTMENT_ID Dept_ID,
+      E.DEPARTMENT_ID DEPT_ID,
       E.JOB_ID JOB,
       ROUND ( CORR ( E.SALARY, E.COMMISSION_PCT ), 2 ) AS "SALARY_COMMISSION_ASSOCIATION"
     FROM
@@ -63,29 +64,31 @@
       E.DEPARTMENT_ID ASC,
       E.JOB_ID DESC;
    
--- SH schema is used in this example. "SH schema" is a Data Warehouse Schema from Oracle (Star Schema model)
+-- SH schema is used in this example. "SH Schema" is a Data Warehouse Schema from Oracle Sample Database Schema.
 
    -- Association Between Sale and Quantity
     
     SELECT
-      t.calendar_month_number Month_No,
-      round(CORR (SUM (s.amount_sold), 
-      SUM (s.quantity_sold)) OVER (ORDER BY t.calendar_month_number),2) AS "Sale and Quantity association" 
+      T.CALENDAR_MONTH_NUMBER MONTH_NO,
+      ROUND(CORR (SUM (S.AMOUNT_SOLD), 
+      SUM (S.QUANTITY_SOLD)) OVER (ORDER BY T.CALENDAR_MONTH_NUMBER),2) AS "Sale and Quantity association" 
                           -- OVER() clause is explained below
     FROM
-      SH.sales s,
-      SH.times t
+      SH.SALES S,
+      SH.TIMES T
     WHERE
-      s.time_id  = t.time_id AND calendar_year = 1998
+      S.TIME_ID  = T.TIME_ID AND CALENDAR_YEAR = 1998
     GROUP BY
-      t.calendar_month_number;
+      T.CALENDAR_MONTH_NUMBER;
   
 --                                  ########     Window Functions   ########
 
 /*
- Analytic functions compute an aggregate value based on a group of rows. They differ from aggregate functions in that they return      multiple rows for each group.
+ Analytic functions compute an aggregate value based on a group of rows. 
+ They differ from aggregate functions in that they return multiple rows for each group.
  
- Analytic functions also operate on subsets of rows, similar to aggregate functions in GROUP BY queries, but they do not reduce the   number of rows returned by the query.
+ Analytic functions also operate on subsets of rows, similar to aggregate functions in GROUP BY queries, 
+ but they do not reduce the number of rows returned by the query.
  
  The group of rows is called a "WINDOW", and is defined by the analytic clause. For each row, a "sliding" window of rows is defined. 
  The window determines the range of rows used to perform the calculations for the "current row". 
@@ -93,7 +96,8 @@
 
  Select MAX() OVER ()
  ~~~~~~~~~~~~~~~~~~~~~
-   Here, The OVER() statement signals a start of an Analytic function. That is what differentiates an Analytical Function from a regular    Oracle SQL function.
+    Here, The OVER() statement signals a start of an Analytic function. 
+    That is what differentiates an Analytical Function from a regular Oracle SQL function.
 
  Select MAX() OVER (Partition by column)
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -101,7 +105,8 @@
 
  Select MAX() OVER (Partition by 'column' order by 'column')
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     Order by clause specify the order of the rows in a window. The Order by clause is a keyword in the Oracle Analytic syntax that is a      requirement for using some Analytic functions
+     Order by clause specify the order of the rows in a window. 
+     The Order by clause is a keyword in the Oracle Analytic syntax that is a requirement for using some Analytic functions
 
  Analytic Functions are the "last set of operations" performed in a query except for the final "ORDER BY" clause.
 
@@ -113,34 +118,34 @@
 
     ----    RANK(), DENSE_RANK() and ROW_NUMBER()    -----
     
-    CREATE TABLE temp (
+    CREATE TABLE TEMP (
       ID NUMBER,
       NAME VARCHAR2(20)
     );
     
-    INSERT INTO temp VALUES (5, '*');
-    INSERT INTO temp VALUES (2, '*');
-    INSERT INTO temp VALUES (5, '*');
-    INSERT INTO temp VALUES (3, '*');
-    INSERT INTO temp VALUES (5, '*');
-    INSERT INTO temp VALUES (3, '*');
-    INSERT INTO temp VALUES (2, '*');
-    INSERT INTO temp VALUES (4, '#');
-    INSERT INTO temp VALUES (8, '#');
-    INSERT INTO temp VALUES (4, '#');
-    INSERT INTO temp VALUES (8, '#');
-    INSERT INTO temp VALUES (4, '#');
+    INSERT INTO TEMP VALUES (5, '*');
+    INSERT INTO TEMP VALUES (2, '*');
+    INSERT INTO TEMP VALUES (5, '*');
+    INSERT INTO TEMP VALUES (3, '*');
+    INSERT INTO TEMP VALUES (5, '*');
+    INSERT INTO TEMP VALUES (3, '*');
+    INSERT INTO TEMP VALUES (2, '*');
+    INSERT INTO TEMP VALUES (4, '#');
+    INSERT INTO TEMP VALUES (8, '#');
+    INSERT INTO TEMP VALUES (4, '#');
+    INSERT INTO TEMP VALUES (8, '#');
+    INSERT INTO TEMP VALUES (4, '#');
     
-    SELECT * FROM temp;
+    SELECT * FROM TEMP;
     
     SELECT
       ID, 
       NAME,
-      DENSE_RANK ( ) OVER ( PARTITION BY NAME ORDER BY ID ) Dense_Ranking,
-      RANK ( )       OVER ( PARTITION BY NAME ORDER BY ID ) Ranking,
-      ROW_NUMBER ( ) OVER ( PARTITION BY NAME ORDER BY ID ) Row_Number
+      DENSE_RANK ( ) OVER ( PARTITION BY NAME ORDER BY ID ) AS "DENSE RANKING",
+      RANK ( )       OVER ( PARTITION BY NAME ORDER BY ID ) RANKING,
+      ROW_NUMBER ( ) OVER ( PARTITION BY NAME ORDER BY ID ) AS "ROW NUMBER"
     FROM
-      temp;
+      TEMP;
       
 
   /*  
@@ -148,14 +153,14 @@
     The DDL scripts are taken from the Oracle Code Library 
   */
 
-   Create
-    Table DEPT
+   CREATE
+    TABLE DEPT
     (
-      Deptno Number   ( 2,0),
-      Dname  Varchar2 ( 14 ),
-      Loc    Varchar2 ( 13 ),
+      DEPTNO NUMBER   ( 2,0),
+      DNAME  VARCHAR2 ( 14 ),
+      LOC    VARCHAR2 ( 13 ),
       
-      Constraint Pk_Dept Primary Key (Deptno)
+      CONSTRAINT PK_DEPT PRIMARY KEY (DEPTNO)
     );
 
 
@@ -177,34 +182,34 @@
 
   -- Populate 'Dept' table
 
-   INSERT ALL 
-     INTO dept (deptno, dname, loc) VALUES(10, 'ACCOUNTING', 'NEW YORK')  /* Insert row into DEPT table using named columns. */
-     INTO dept VALUES(20, 'RESEARCH', 'DALLAS')                           /* Insert a row into DEPT table by column position.*/
-     INTO dept VALUES(30, 'SALES', 'CHICAGO')
-     INTO dept VALUES(40, 'OPERATIONS', 'BOSTON')
-   SELECT * FROM dual;
+     INSERT ALL 
+       INTO DEPT (DEPTNO, DNAME, LOC) VALUES(10, 'ACCOUNTING', 'NEW YORK') /* Insert row using named columns. */
+       INTO DEPT VALUES(20, 'RESEARCH', 'DALLAS')                          /* Insert row by column position.*/
+       INTO DEPT VALUES(30, 'SALES', 'CHICAGO')
+       INTO DEPT VALUES(40, 'OPERATIONS', 'BOSTON')
+     SELECT * FROM DUAL;
 
   -- Populate 'EMP' table
   
     INSERT ALL
-     into emp  values( 7839, 'KING', 'PRESIDENT', null,  to_date('17-11-1981','dd-mm-yyyy'),  5000, null, 10  )
-     into emp  values( 7698, 'BLAKE', 'MANAGER', 7839,   to_date('01-05-1981','dd-mm-yyyy'),  2850, null, 30  )
-     into emp  values( 7782, 'CLARK', 'MANAGER', 7839,   to_date('09-06-1981','dd-mm-yyyy'),  2450, null, 10  )
-     into emp  values( 7566, 'JONES', 'MANAGER', 7839,   to_date('02-04-1981','dd-mm-yyyy'),  2975, null, 20  )
-     into emp  values( 7788, 'SCOTT', 'ANALYST', 7566,   to_date('13-JUL-87','dd-mm-rr')-85,  3000, null, 20  )
-     into emp  values( 7902, 'FORD',  'ANALYST', 7566,   to_date('03-12-1981','dd-mm-yyyy'),  3000, null, 20  )
-     into emp  values( 7369, 'SMITH',   'CLERK', 7902,   to_date('17-12-1980','dd-mm-yyyy'),  0800, null, 20  )
-     into emp  values( 7499, 'ALLEN','SALESMAN', 7698,   to_date('20-02-1981','dd-mm-yyyy'),  1600, 300,  30  )
-     into emp  values( 7521, 'WARD', 'SALESMAN', 7698,   to_date('22-02-1981','dd-mm-yyyy'),  1250, 500,  30  )
-     into emp  values( 7654, 'MARTIN','SALESMAN',7698,   to_date('28-09-1981','dd-mm-yyyy'),  1250, 1400, 30  )
-     into emp  values( 7844, 'TURNER','SALESMAN',7698,   to_date('08-09-1981','dd-mm-yyyy'),  1500, 0,    30  )
-     into emp  values( 7876, 'ADAMS',   'CLERK', 7788,   to_date('13-JUL-87', 'dd-mm-rr')-51, 1100, null, 20  )
-     into emp  values( 7900, 'JAMES',   'CLERK', 7698,   to_date('03-12-1981','dd-mm-yyyy'),  950,  null, 30  )
-     into emp  values( 7934, 'MILLER',  'CLERK', 7782,   to_date('23-01-1982','dd-mm-yyyy'),  1300, null, 10  )
-     into emp  values( 7930, 'MONIR',  'ADE', 7782,   to_date('23-01-2017','dd-mm-yyyy'),  null, null, 10  )
-    SELECT * FROM dual;
+       INTO EMP  VALUES( 7839, 'KING', 'PRESIDENT', NULL,  TO_DATE('17-11-1981','dd-mm-yyyy'),  5000, NULL, 10  )
+       INTO EMP  VALUES( 7698, 'BLAKE', 'MANAGER', 7839,   TO_DATE('01-05-1981','dd-mm-yyyy'),  2850, NULL, 30  )
+       INTO EMP  VALUES( 7782, 'CLARK', 'MANAGER', 7839,   TO_DATE('09-06-1981','dd-mm-yyyy'),  2450, NULL, 10  )
+       INTO EMP  VALUES( 7566, 'JONES', 'MANAGER', 7839,   TO_DATE('02-04-1981','dd-mm-yyyy'),  2975, NULL, 20  )
+       INTO EMP  VALUES( 7788, 'SCOTT', 'ANALYST', 7566,   TO_DATE('13-JUL-87','dd-mm-rr')-85,  3000, NULL, 20  )
+       INTO EMP  VALUES( 7902, 'FORD',  'ANALYST', 7566,   TO_DATE('03-12-1981','dd-mm-yyyy'),  3000, NULL, 20  )
+       INTO EMP  VALUES( 7369, 'SMITH',   'CLERK', 7902,   TO_DATE('17-12-1980','dd-mm-yyyy'),  0800, NULL, 20  )
+       INTO EMP  VALUES( 7499, 'ALLEN','SALESMAN', 7698,   TO_DATE('20-02-1981','dd-mm-yyyy'),  1600, 300,  30  )
+       INTO EMP  VALUES( 7521, 'WARD', 'SALESMAN', 7698,   TO_DATE('22-02-1981','dd-mm-yyyy'),  1250, 500,  30  )
+       INTO EMP  VALUES( 7654, 'MARTIN','SALESMAN',7698,   TO_DATE('28-09-1981','dd-mm-yyyy'),  1250, 1400, 30  )
+       INTO EMP  VALUES( 7844, 'TURNER','SALESMAN',7698,   TO_DATE('08-09-1981','dd-mm-yyyy'),  1500, 0,    30  )
+       INTO EMP  VALUES( 7876, 'ADAMS',   'CLERK', 7788,   TO_DATE('13-JUL-87', 'dd-mm-rr')-51, 1100, NULL, 20  )
+       INTO EMP  VALUES( 7900, 'JAMES',   'CLERK', 7698,   TO_DATE('03-12-1981','dd-mm-yyyy'),  950,  NULL, 30  )
+       INTO EMP  VALUES( 7934, 'MILLER',  'CLERK', 7782,   TO_DATE('23-01-1982','dd-mm-yyyy'),  1300, NULL, 10  )
+       INTO EMP  VALUES( 7930, 'MONIR',  'ADE', 7782,   TO_DATE('23-01-2017','dd-mm-yyyy'),  NULL, NULL, 10  )
+    SELECT * FROM DUAL;
 
-  --  Example of Window functions
+  --  Example of "Window Functions"
 
     SELECT 
        EMPNO, DEPTNO, SAL,
@@ -213,19 +218,22 @@
     FROM   EMP;
     
 
-                                --    #############       FIRST_VALUE ( )      ###############
+                             --    #############       FIRST_VALUE ( )      ###############
 
   /*
-    The order_by_clause is used to order rows, or siblings, within a partition. 
-    So, if an analytic function is sensitive to the order of the siblings in a partition you should include an order_by_clause. 
-    The following query uses the FIRST_VALUE function to return the first salary reported in each department.
+    The 'Order by' clause is used to order rows, or siblings, within a partition. 
+    So, if an analytic function is sensitive to the order of the siblings in a partition you should include an 'Order by' clause. 
+    The following query uses the FIRST_VALUE () function to return the first salary reported in each department.
+    The function returns the first value in an ordered set of values.
+    If the first value in the set is NULL, then it returns NULL unless you specify IGNORE NULLS.
     
   */
+
     
     SELECT EMPNO, 
            DEPTNO, 
            SAL, 
-           FIRST_VALUE(SAL IGNORE NULLS) OVER (PARTITION BY DEPTNO) AS FIRST_SAL_IN_DEPT_UNORDER
+           FIRST_VALUE(SAL IGNORE NULLS) OVER (PARTITION BY DEPTNO) AS "FIRST SAL IN DEPT UNORDER"
     FROM   EMP
     WHERE DEPTNO = 10;
     
@@ -233,18 +241,25 @@
     SELECT EMPNO, 
            DEPTNO, 
            SAL, 
-           FIRST_VALUE(SAL IGNORE NULLS) OVER (PARTITION BY DEPTNO ORDER BY SAL ASC NULLS LAST) AS FIRST_SAL_IN_DEPT_ORDER
+           FIRST_VALUE(SAL IGNORE NULLS) OVER (PARTITION BY DEPTNO ORDER BY SAL ASC NULLS LAST) AS "FIRST SAL IN DEPT ORDER"
     FROM   EMP
     WHERE DEPTNO = 10;
     
     
-    -- SEE THE OUTPUT CAREFULLY :D .  Ordering is same for both first_value() function !  
+    -- SEE THE OUTPUT VERY CAREFULLY 
     
-    SELECT EMPNO, 
-           DEPTNO, 
-           SAL, 
-           FIRST_VALUE(SAL IGNORE NULLS) OVER (PARTITION BY DEPTNO) AS FIRST_SAL_IN_DEPT_UNORDER,
-           FIRST_VALUE(SAL IGNORE NULLS) OVER (PARTITION BY DEPTNO ORDER BY SAL ASC NULLS LAST) AS FIRST_SAL_IN_DEPT_ORDER
+    SELECT 
+       EMPNO, 
+       DEPTNO, 
+       SAL, 
+       FIRST_VALUE(SAL IGNORE NULLS) OVER (PARTITION BY DEPTNO)  AS "DEPT FIRST SAL UNORDER",  -- DEFAULT ORDER IS :- ASC NULLS LAST
+       
+       FIRST_VALUE(SAL IGNORE NULLS) OVER (PARTITION BY DEPTNO ORDER BY SAL ASC  NULLS LAST)  AS "DEPT FIRST SAL ASC1",
+       FIRST_VALUE(SAL IGNORE NULLS) OVER (PARTITION BY DEPTNO ORDER BY SAL ASC  NULLS FIRST) AS "DEPT FIRST SAL ASC2", 
+       
+       FIRST_VALUE(SAL IGNORE NULLS) OVER (PARTITION BY DEPTNO ORDER BY SAL DESC NULLS LAST)  AS "DEPT FIRST SAL DESC1",
+       FIRST_VALUE(SAL IGNORE NULLS) OVER (PARTITION BY DEPTNO ORDER BY SAL DESC NULLS FIRST) AS "DEPT FIRST SAL DESC2"         
     FROM   EMP
-    WHERE DEPTNO = 10;
+    WHERE DEPTNO = 10
+    ORDER BY 2 DESC;
     
