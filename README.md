@@ -1,2 +1,2 @@
 # Oracle_SQL
-Contains SQL scrips related to some common functions of Oracle.
+This repository contains some "SQL scripts" related to some common Oracle SQL functions.

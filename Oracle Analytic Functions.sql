@@ -1,28 +1,28 @@
 /*
    Author  : Md Moniruzzaman Monir
-   Purpose : To show the use of ANALYTIC FUNCTIONS
 */
 
 
 
 
-/*
- ************************************** CORR() *****************************
+/*                                   ~~~~~~~~~~~~~~~ CORR() ~~~~~~~~~~~~~
  
- * The Oracle CORR() function calculates the Pearson's correlation coefficient (r), which is the coefficient of correlation of a set of number pairs. 
-   It can be used as an aggregate or analytic function.
+ * The Oracle CORR() function calculates the Pearson's correlation coefficient (r), which is the coefficient of correlation of a set of    number pairs. It can be used as an aggregate or analytic function.
    
- * Pearson's correlation reflects the degree of linear relationship between two variables. It ranges from +1 to -1.
+ * Pearson's correlation coefficient reflects the degree of linear relationship between two variables. It ranges from +1 to -1.
  
- * A correlation of +1 means that there is a perfect positive linear relationship between variables. 
+ * A correlation of +1 means that there is a perfect positive "linear" relationship between variables. 
  
- * If r is between 0.75 to 1 then perfect positive correlation. r is between -0.75 to -1 then perfect negative correlation.
+ * r is between 0.75 to 1 then perfect positive correlation.
+   r is between -0.75 to -1 then perfect negative correlation.
  
- * r is between -0.25 to -0.75 or 0.25 to 0.75 then moderate correlation. r is 0 then NO Correlation. r is between 0 to 0.25 or 0 to -0.25 then very low correlation
+ * r is between -0.25 to -0.75 or 0.25 to 0.75 then moderate correlation. 
+   r is 0 then NO Correlation. 
+   r is between 0 to 0.25 or 0 to -0.25 then very low correlation.
 
  * Requires atleast two rows and ignore NULL values
 
-   https://en.wikipedia.org/wiki/Pearson_correlation_coefficient [Very Good to understand what the value of r means]
+   https://en.wikipedia.org/wiki/Pearson_correlation_coefficient   [Very Good to understand what the value of r means]
 
 */
 
@@ -44,9 +44,8 @@
     FROM 
       HR.EMPLOYEES;
     
- 
 
-  -- SALARY_COMMISSION_ASSOCIATION IN EACH DEPARTMENT
+  -- ASSOCIATION BETWEEN SALARY & COMMISSION IN EACH DEPARTMENT
   
     SELECT
       E.DEPARTMENT_ID Dept_ID,
@@ -63,16 +62,16 @@
     ORDER BY
       E.DEPARTMENT_ID ASC,
       E.JOB_ID DESC;
-    
-    
+   
+-- SH schema is used in this example. "SH schema" is a Data Warehouse Schema from Oracle (Star Schema model)
 
-  --SH schema is used in this example. "SH schema" is a data warehouse schema (star schema model)
-
-    --Sale and Quantity Association
+   -- Association Between Sale and Quantity
     
     SELECT
       t.calendar_month_number Month_No,
-      round(CORR (SUM (s.amount_sold), SUM (s.quantity_sold)) OVER (ORDER BY t.calendar_month_number),2) AS "Sale and Quantity association"
+      round(CORR (SUM (s.amount_sold), 
+      SUM (s.quantity_sold)) OVER (ORDER BY t.calendar_month_number),2) AS "Sale and Quantity association" 
+                          -- OVER() clause is explained below
     FROM
       SH.sales s,
       SH.times t
@@ -81,32 +80,33 @@
     GROUP BY
       t.calendar_month_number;
   
---                                               ########       Window Functions   ########
+--                                  ########     Window Functions   ########
 
 /*
- Analytic functions compute an aggregate value based on a group of rows. They differ from aggregate functions in that they return multiple rows for each group.
- Analytic functions also operate on subsets of rows, similar to aggregate functions in GROUP BY queries, but they do not reduce the number of rows returned by the query.
+ Analytic functions compute an aggregate value based on a group of rows. They differ from aggregate functions in that they return      multiple rows for each group.
  
- The group of rows is called a WINDOW and is defined by the analytic clause. For each row, a "sliding" window of rows is defined. 
+ Analytic functions also operate on subsets of rows, similar to aggregate functions in GROUP BY queries, but they do not reduce the   number of rows returned by the query.
+ 
+ The group of rows is called a "WINDOW", and is defined by the analytic clause. For each row, a "sliding" window of rows is defined. 
  The window determines the range of rows used to perform the calculations for the "current row". 
  Window sizes can be based on either a physical number of rows or a logical interval such as time.
 
  Select MAX() OVER ()
- 
-   Here, The OVER() statement signals a start of an Analytic function. That is what differentiates an Analytical Function from a regular Oracle SQL function.
+ ~~~~~~~~~~~~~~~~~~~~~
+   Here, The OVER() statement signals a start of an Analytic function. That is what differentiates an Analytical Function from a regular    Oracle SQL function.
 
- Select MAX() OVER(partition by field1)
- 
-   The portioning clause is used to setup the group of data that the Analytic function would be applied to.
+ Select MAX() OVER (Partition by column)
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    The partioning clause is used to setup the group of data (window) upon which the Analytic function would work.
 
- Select MAX() OVER(Partition by field order by)
-   
-   Order by specify the order of the window in the group by statement. The Order by clause is a keyword in the Oracle Analytic syntax that is requirement for using some Analytic functions
+ Select MAX() OVER (Partition by 'column' order by 'column')
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     Order by clause specify the order of the rows in a window. The Order by clause is a keyword in the Oracle Analytic syntax that is a      requirement for using some Analytic functions
 
- Analytic functions are the last set of operations performed in a query except for the final ORDER BY clause.
+ Analytic Functions are the "last set of operations" performed in a query except for the final "ORDER BY" clause.
 
- All joins and all WHERE, GROUP BY, and HAVING clauses are completed before the analytic functions are processed. 
- Therefore, analytic functions can appear only in the select list or ORDER BY clause.
+ All joins & all WHERE, GROUP BY, HAVING clauses are completed before the analytic functions are processed. 
+ Therefore, analytic functions can appear only in the 'SELECT' list or 'ORDER BY' clause.
 
 */
 
@@ -134,27 +134,28 @@
     SELECT * FROM temp;
     
     SELECT
-      ID, NAME,
-      DENSE_RANK ( ) OVER ( PARTITION BY NAME ORDER BY ID ) dense_ranking,
-      RANK ( ) OVER ( PARTITION BY NAME ORDER BY ID ) ranking,
-      ROW_NUMBER ( ) OVER ( PARTITION BY NAME ORDER BY ID ) row_number
+      ID, 
+      NAME,
+      DENSE_RANK ( ) OVER ( PARTITION BY NAME ORDER BY ID ) Dense_Ranking,
+      RANK ( )       OVER ( PARTITION BY NAME ORDER BY ID ) Ranking,
+      ROW_NUMBER ( ) OVER ( PARTITION BY NAME ORDER BY ID ) Row_Number
     FROM
       temp;
       
 
   /*  
-    EMP and DEPT tables.  Classic Oracle tables with 4 departments and 14 employees. 
+    EMP and DEPT tables. Classic Oracle tables with 4 departments and 14 employees.
     The DDL scripts are taken from the Oracle Code Library 
   */
 
    Create
     Table DEPT
     (
-      Deptno Number ( 2, 0 ),
+      Deptno Number   ( 2,0),
       Dname  Varchar2 ( 14 ),
       Loc    Varchar2 ( 13 ),
       
-      Constraint Pk_Dept Primary Key ( Deptno )
+      Constraint Pk_Dept Primary Key (Deptno)
     );
 
 
@@ -170,11 +171,11 @@
       COMM     NUMBER ( 7, 2 ),
       DEPTNO   NUMBER ( 2, 0 ),
       
-      CONSTRAINT PK_EMP PRIMARY KEY ( EMPNO ),
+      CONSTRAINT PK_EMP    PRIMARY KEY ( EMPNO ),
       CONSTRAINT FK_DEPTNO FOREIGN KEY ( DEPTNO ) REFERENCES DEPT ( DEPTNO )
     );
 
-  -- Populate Dept table
+  -- Populate 'Dept' table
 
    INSERT ALL 
      INTO dept (deptno, dname, loc) VALUES(10, 'ACCOUNTING', 'NEW YORK')  /* Insert row into DEPT table using named columns. */
@@ -183,7 +184,7 @@
      INTO dept VALUES(40, 'OPERATIONS', 'BOSTON')
    SELECT * FROM dual;
 
-  -- Populate EMP table
+  -- Populate 'EMP' table
   
     INSERT ALL
      into emp  values( 7839, 'KING', 'PRESIDENT', null,  to_date('17-11-1981','dd-mm-yyyy'),  5000, null, 10  )
@@ -212,7 +213,7 @@
     FROM   EMP;
     
 
-                                --    #############               FIRST_VALUE ( )      ###############
+                                --    #############       FIRST_VALUE ( )      ###############
 
   /*
     The order_by_clause is used to order rows, or siblings, within a partition. 
@@ -247,9 +248,3 @@
     FROM   EMP
     WHERE DEPTNO = 10;
     
-
-
-
-
-
-
