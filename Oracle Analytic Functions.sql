@@ -237,7 +237,7 @@
     WHERE DEPTNO = 10;
     
     
-    -- SEE THE OUTPUT CAREFULLY :D .  Ordering is same for the first_value()  
+    -- SEE THE OUTPUT CAREFULLY :D .  Ordering is same for both first_value() function !  
     
     SELECT EMPNO, 
            DEPTNO, 
@@ -247,12 +247,6 @@
     FROM   EMP
     WHERE DEPTNO = 10;
     
-    
-  /*
-    In this case the "ASC NULLS LAST" keywords are unnecessary as ASC is the default for an order_by_clause and NULLS LAST is the default for ASC orders. 
-    When ordering by DESC, the default is NULLS FIRST.
-  */
-
 
 
 
