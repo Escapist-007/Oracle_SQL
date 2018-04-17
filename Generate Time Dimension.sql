@@ -4,125 +4,113 @@
 
 /*    TIME DIMENSION CREATION */
 
- CREATE TABLE DIM_TIME
-  (
-    ID         NUMBER ( 10 ) PRIMARY KEY,
-    BEGIN_DATE DATE,
-    END_DATE   DATE,
-    MONTH      VARCHAR2 ( 5 ),
-    MONTH_INT  NUMBER ( 2 ),
-    QUARTER    NUMBER ( 1 ),
-    YEAR       VARCHAR2 ( 4 ),
-    YEAR_INT   NUMBER ( 4 )
-  );
-
-  
+    CREATE TABLE DIM_TIME
+    (
+      ID         NUMBER ( 10 ) PRIMARY KEY,
+      BEGIN_DATE DATE,
+      END_DATE   DATE,
+      MONTH      VARCHAR2 ( 5 ),
+      MONTH_INT  NUMBER ( 2 ),
+      QUARTER    NUMBER ( 1 ),
+      YEAR       VARCHAR2 ( 4 ),
+      YEAR_INT   NUMBER ( 4 )
+    );
+    
+    
     /*       INSERT MONTHLY (MONTH - GRANULARITY)    */
-
-
-   INSERT INTO 
-         DIM_TIME (ID, Begin_Date, End_Date, Month, Month_Int, Quarter, Year, Year_Int) 
-
-   WITH TIME_RANGE AS 
-   (
+    
+    
+    INSERT INTO DIM_TIME (ID, BEGIN_DATE, END_DATE, MONTH, MONTH_INT, QUARTER, YEAR, YEAR_INT) 
+    WITH TIME_RANGE AS 
+    (
+      SELECT
+         TO_DATE ( '01-Jan-2016', 'DD-MON-YYYY' ) START_DATE, -- 01 JANUARY, 2016
+         SYSDATE END_DATE
+      FROM
+         DUAL
+    )
     SELECT
-       TO_DATE ( '01-Jan-2016', 'DD-MON-YYYY' ) Start_Date, -- 01 JANUARY, 2016
-       SYSDATE End_Date
-    FROM
-       DUAL
-   )
-   SELECT
-         TO_NUMBER (TO_CHAR(ADD_MONTHS(TIME_RANGE.Start_Date,(LEVEL-1)),'YYYYQMM')) ID,
-
-         ADD_MONTHS(TIME_RANGE.Start_Date,(LEVEL-1))             Month_Begin_Date,
-         LAST_DAY( ADD_MONTHS(TIME_RANGE.Start_Date,(LEVEL-1)) ) Month_End_Date,
-
-         to_char( ADD_MONTHS(TIME_RANGE.Start_Date,(LEVEL-1)),'MON' )           Month , 
-         to_number( to_char(ADD_MONTHS(TIME_RANGE.Start_Date,(LEVEL-1)),'MM'))  Month_Int,
-
-         to_char(ADD_MONTHS(TIME_RANGE.Start_Date,(LEVEL-1)),'q')               Quarter,   
-         to_char(ADD_MONTHS(TIME_RANGE.Start_Date,(LEVEL-1)),'YYYY')            Year,
-         to_number(to_char(ADD_MONTHS(TIME_RANGE.Start_Date,(LEVEL-1)),'YYYY')) Year_Int
-
-   FROM TIME_RANGE
-   CONNECT BY ( LEVEL - 1 ) <= MONTHS_BETWEEN ( SYSDATE, TIME_RANGE.Start_Date);
-  
-  
-  
+     TO_NUMBER (TO_CHAR(ADD_MONTHS(TIME_RANGE.START_DATE,(LEVEL-1)),'YYYYQMM')) ID,
+    
+     ADD_MONTHS(TIME_RANGE.START_DATE,(LEVEL-1))             MONTH_BEGIN_DATE,
+     LAST_DAY( ADD_MONTHS(TIME_RANGE.START_DATE,(LEVEL-1)) ) MONTH_END_DATE,
+    
+     TO_CHAR( ADD_MONTHS(TIME_RANGE.START_DATE,(LEVEL-1)),'MON' )           MONTH , 
+     TO_NUMBER( TO_CHAR(ADD_MONTHS(TIME_RANGE.START_DATE,(LEVEL-1)),'MM'))  MONTH_INT,
+    
+     TO_CHAR(ADD_MONTHS(TIME_RANGE.START_DATE,(LEVEL-1)),'q')               QUARTER,   
+     TO_CHAR(ADD_MONTHS(TIME_RANGE.START_DATE,(LEVEL-1)),'YYYY')            YEAR,
+     TO_NUMBER(TO_CHAR(ADD_MONTHS(TIME_RANGE.START_DATE,(LEVEL-1)),'YYYY')) YEAR_INT
+    
+    FROM TIME_RANGE
+    CONNECT BY ( LEVEL - 1 ) <= MONTHS_BETWEEN ( SYSDATE, TIME_RANGE.START_DATE);
+    
+    
+    
     /*      INSERT QUARTERLY (QUARTER - GRANULARITY)   */
-
-
-  INSERT INTO 
-        DIM_TIME (ID, Begin_Date, End_Date, Month, Month_Int, Quarter, Year, Year_Int) 
-
-  WITH TIME_RANGE AS
-  (
-   SELECT
-      TO_DATE ( '01-Jan-2016', 'DD-MON-YYYY' ) Start_Date, 
-      SYSDATE End_Date
-   FROM
-      DUAL
-  )
-  SELECT
-        TO_NUMBER (TO_CHAR(ADD_MONTHS(TIME_RANGE.Start_Date,(LEVEL-1)*3),'YYYYQ')) ID,
-
-        ADD_MONTHS(TIME_RANGE.Start_Date,(LEVEL-1)*3)   Quarter_Begin_Date,
-
+    
+    
+    INSERT INTO DIM_TIME (ID, BEGIN_DATE, END_DATE, MONTH, MONTH_INT, QUARTER, YEAR, YEAR_INT) 
+    WITH TIME_RANGE AS
+    (
+      SELECT
+        TO_DATE ( '01-Jan-2016', 'DD-MON-YYYY' ) START_DATE, 
+        SYSDATE END_DATE
+      FROM
+        DUAL
+    )
+    SELECT
+        TO_NUMBER (TO_CHAR(ADD_MONTHS(TIME_RANGE.START_DATE,(LEVEL-1)*3),'YYYYQ')) ID,
+        ADD_MONTHS(TIME_RANGE.START_DATE,(LEVEL-1)*3)   QUARTER_BEGIN_DATE,
         CASE 
-          WHEN TO_CHAR (SYSDATE, 'YYYYQ') = TO_CHAR (LAST_DAY(ADD_MONTHS(TIME_RANGE.Start_Date,(LEVEL-1)*3 + 2) ), 'YYYYQ') 
+          WHEN TO_CHAR (SYSDATE, 'YYYYQ') = TO_CHAR (LAST_DAY(ADD_MONTHS(TIME_RANGE.START_DATE,(LEVEL-1)*3 + 2) ), 'YYYYQ') 
               THEN LAST_DAY (SYSDATE)
           ELSE 
-             LAST_DAY( ADD_MONTHS ( TIME_RANGE.Start_Date,(LEVEL-1)*3 + 2) )
-        END Quarter_END_DATE,
-
-        'N/A' Month , 
-         -1   Month_Int,
-
-        to_char(ADD_MONTHS(TIME_RANGE.Start_Date,(LEVEL-1)*3),'q')               Quarter,   
-        to_char(ADD_MONTHS(TIME_RANGE.Start_Date,(LEVEL-1)*3),'YYYY')            Year,
-        to_number(to_char(ADD_MONTHS(TIME_RANGE.Start_Date,(LEVEL-1)*3),'YYYY')) Year_Int
-
-  FROM TIME_RANGE
-  CONNECT BY ( LEVEL - 1 ) <= MONTHS_BETWEEN ( SYSDATE, TIME_RANGE.Start_Date)/3;
- 
- 
+             LAST_DAY( ADD_MONTHS ( TIME_RANGE.START_DATE,(LEVEL-1)*3 + 2) )
+        END QUARTER_END_DATE,
+    
+        'N/A' MONTH , 
+         -1   MONTH_INT,
+        TO_CHAR(ADD_MONTHS(TIME_RANGE.START_DATE,(LEVEL-1)*3),'q')               QUARTER,   
+        TO_CHAR(ADD_MONTHS(TIME_RANGE.START_DATE,(LEVEL-1)*3),'YYYY')            YEAR,
+        TO_NUMBER(TO_CHAR(ADD_MONTHS(TIME_RANGE.START_DATE,(LEVEL-1)*3),'YYYY')) YEAR_INT
+    
+    FROM TIME_RANGE
+    CONNECT BY ( LEVEL - 1 ) <= MONTHS_BETWEEN ( SYSDATE, TIME_RANGE.START_DATE)/3;
+    
+    
     
       /*      INSERT YEARLY (YEAR - GRANULARITY)      */
-
-
-  INSERT INTO 
-        DIM_TIME (ID, Begin_Date, End_Date, Month, Month_Int, Quarter, Year, Year_Int) 
-
-  WITH TIME_RANGE AS
-  (
-   SELECT
-      TO_DATE ( '01-Jan-2016', 'DD-MON-YYYY' ) Start_Date, 
-      SYSDATE End_Date
-   FROM
-      DUAL
-  )
-  SELECT
-        TO_NUMBER (TO_CHAR(ADD_MONTHS(TIME_RANGE.Start_Date,(LEVEL-1)*12),'YYYY')) ID,
-
-        ADD_MONTHS(TIME_RANGE.Start_Date,(LEVEL-1)*12)   Year_Begin_Date,
-
+    
+    
+    INSERT INTO DIM_TIME (ID, BEGIN_DATE, END_DATE, MONTH, MONTH_INT, QUARTER, YEAR, YEAR_INT) 
+    WITH TIME_RANGE AS
+    (
+      SELECT
+        TO_DATE ( '01-Jan-2016', 'DD-MON-YYYY' ) START_DATE, 
+        SYSDATE END_DATE
+      FROM
+        DUAL
+    )
+    SELECT
+        TO_NUMBER (TO_CHAR(ADD_MONTHS(TIME_RANGE.START_DATE,(LEVEL-1)*12),'YYYY')) ID,
+        ADD_MONTHS(TIME_RANGE.START_DATE,(LEVEL-1)*12)   YEAR_BEGIN_DATE,
         CASE 
-          WHEN EXTRACT (YEAR FROM SYSDATE) = EXTRACT ( YEAR FROM LAST_DAY(ADD_MONTHS(TIME_RANGE.Start_Date,(LEVEL-1)*12 + 11) )) 
+          WHEN EXTRACT (YEAR FROM SYSDATE) = EXTRACT ( YEAR FROM LAST_DAY(ADD_MONTHS(TIME_RANGE.START_DATE,(LEVEL-1)*12 + 11) )) 
            THEN LAST_DAY ( SYSDATE )
           ELSE 
-             LAST_DAY( ADD_MONTHS(TIME_RANGE.Start_Date,(LEVEL-1)*12 + 11) )
-        END Quarter_END_DATE,
-
-        'N/A' Month , 
-         -1   Month_Int,
-         -1   Quarter,   
-
-        to_char(ADD_MONTHS(TIME_RANGE.Start_Date,(LEVEL-1)*12),'YYYY')            Year,
-        to_number(to_char(ADD_MONTHS(TIME_RANGE.Start_Date,(LEVEL-1)*12),'YYYY')) Year_Int
-
-  FROM TIME_RANGE
-  CONNECT BY ( LEVEL - 1 ) <= MONTHS_BETWEEN ( SYSDATE, TIME_RANGE.Start_Date)/12;
- 
- 
-  COMMIT;
-  SELECT * FROM DIM_TIME;
+             LAST_DAY( ADD_MONTHS(TIME_RANGE.START_DATE,(LEVEL-1)*12 + 11) )
+        END QUARTER_END_DATE,
+    
+        'N/A' MONTH , 
+         -1   MONTH_INT,
+         -1   QUARTER,   
+        TO_CHAR(ADD_MONTHS(TIME_RANGE.START_DATE,(LEVEL-1)*12),'YYYY')            YEAR,
+        TO_NUMBER(TO_CHAR(ADD_MONTHS(TIME_RANGE.START_DATE,(LEVEL-1)*12),'YYYY')) YEAR_INT
+    
+    FROM TIME_RANGE
+    CONNECT BY ( LEVEL - 1 ) <= MONTHS_BETWEEN ( SYSDATE, TIME_RANGE.START_DATE)/12;
+    
+    
+    COMMIT;
+    SELECT * FROM DIM_TIME;
