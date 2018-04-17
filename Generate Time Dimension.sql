@@ -15,7 +15,7 @@
   
   
   
- --           INSERT MONTHLY (MONTH - GRANULARITY)
+    /*       INSERT MONTHLY (MONTH - GRANULARITY)    */
 
     INSERT INTO 
           DIM_TIME (ID, Begin_Date, End_Date, Month, Month_Int, Quarter, Year, Year_Int) 
@@ -47,7 +47,7 @@
   
   
   
- --            INSERT QUARTERLY (QUARTER - GRANULARITY)
+    /*      INSERT QUARTERLY (QUARTER - GRANULARITY)   */
 
 
     INSERT INTO 
@@ -88,7 +88,7 @@
  
  
     
-  --         INSERT YEARLY (YEAR - GRANULARITY)
+      /*      INSERT YEARLY (YEAR - GRANULARITY)      */
 
 
     INSERT INTO 
