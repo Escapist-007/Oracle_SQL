@@ -129,11 +129,68 @@ SELECT
 FROM
   HR.EMPLOYEES;
   
+
+  /*
+     Predefined collections :
+    ---------------------------
+    If I need to generate 3 rows called AAA, BBB, CCC, I could use dual and union all. 
+    Another method is to use "Extensibility Types" (e.g. ODCIVarchar2List [Stores varrays of VARCHAR2s], ODCINumberList [Stores varrays of NUMBERs] etc )
+  
+  */
+
+SELECT 'AAA' FROM dual
+  UNION ALL
+SELECT 'BBB'FROM dual
+  UNION ALL
+SELECT 'CCC' FROM dual;
+
+
+SELECT * 
+FROM 
+TABLE(SYS.ODCIVARCHAR2LIST('AAA','BBB','CCC'));
+
+/* Another Example */
+SELECT 
+  COLUMN_VALUE X 
+FROM  
+  TABLE(SYS.ODCIVARCHAR2LIST('X',NULL,'Y',-1));
   
   
-  
-  
-  
+  /* At a glance */
+
+WITH
+  X AS
+  (
+    SELECT
+      COLUMN_VALUE X
+    FROM
+      TABLE ( SYS.ODCIVARCHAR2LIST ( 'X', NULL ) )
+  )
+  ,
+  Y AS
+  (
+    SELECT
+      COLUMN_VALUE Y
+    FROM
+      TABLE ( SYS.ODCIVARCHAR2LIST ( 'Y', NULL ) )
+  )
+  ,
+  Z AS
+  (
+    SELECT
+      COLUMN_VALUE Z
+    FROM
+      TABLE ( SYS.ODCIVARCHAR2LIST ( 'Z', NULL ) )
+  )
+SELECT
+  X,
+  Y,
+  Z,
+  NVL ( X, Y ),
+  NVL2 ( X, Y, Z ),
+  COALESCE ( X, Y, Z )
+FROM
+  X, Y, Z;
   
   
   
