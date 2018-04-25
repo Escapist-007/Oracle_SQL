@@ -10,9 +10,7 @@
     • NVL2(expr1, expr2, expr3)
     • NULLIF(expr1, expr2)
     • COALESCE(expr1, expr2, ..., exprn)
-*/
 
-/*
         NVL (expr1, expr2)
         
 In the syntax:
