@@ -87,3 +87,74 @@ SELECT
   NULLIF ( COMMISSION_PCT, 0 )
 FROM
   HR.EMPLOYEES;
+  
+  
+/*
+  The COALESCE function returns the first non-null expression in the list.
+  
+  Syntax : COALESCE (expr1, expr2, ... exprn)
+  
+  In the syntax:
+    • expr1 returns this expression if it is not null
+    • expr2 returns this expression if the first expression is null and this expression is not null
+    • exprn returns this expression if the preceding expressions are null
+  
+  Note that all expressions must be of the same data type.
+
+*/
+
+
+    /* TO_CHAR function is applied so that all expressions are of the same data type. */
+
+SELECT
+  LAST_NAME,
+  EMPLOYEE_ID,
+  COMMISSION_PCT,
+  MANAGER_ID,
+  COALESCE ( TO_CHAR ( COMMISSION_PCT ), TO_CHAR ( MANAGER_ID ),'No commission and no manager' ) COALESCE_OUPUT
+FROM
+  HR.EMPLOYEES;
+
+/* 
+  For the employees who do not get any commission, your organization wants to give a salary increment of $2,000 and for employees who get commission, 
+  the query should compute the new salary that is equal to the existing salary added to the commission amount.
+*/
+
+
+SELECT
+  LAST_NAME,
+  SALARY,
+  COMMISSION_PCT,
+  COALESCE ( ( SALARY + ( COMMISSION_PCT * SALARY ) ), SALARY + 2000, SALARY ) "New Salary"
+FROM
+  HR.EMPLOYEES;
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
