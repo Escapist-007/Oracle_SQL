@@ -3,13 +3,13 @@
 */
 
 
-  -- TIME DIMENSION CREATION 
+-- TIME DIMENSION CREATION 
   
   
 
- CREATE 
+CREATE 
    TABLE DIM_TIME 
- (
+(
    ID         NUMBER ( 10, 0 ) PRIMARY KEY,
    BEGIN_DATE DATE,
    END_DATE   DATE,
@@ -18,10 +18,10 @@
    QUARTER    NUMBER ( 1 ),
    YEAR       VARCHAR2 ( 4 ),
    YEAR_INT   NUMBER ( 4 )
- );
+);
     
     
-  -- INSERT MONTHLY (MONTH - GRANULARITY)   
+ -- INSERT MONTHLY (MONTH - GRANULARITY)   
     
     
     
