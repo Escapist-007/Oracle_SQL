@@ -93,3 +93,31 @@ FROM
   HR.EMPLOYEES
 GROUP BY
   DEPARTMENT_ID;
+  
+  
+/*
+  How to find the mode when there are more than one mode (bi-modal or multi-modal)
+
+  STATS_MODE takes as its argument a set of values and returns the value that occurs with the greatest frequency. If more than one mode exists, Oracle 
+  Database chooses one and returns only that one value.
+
+  To obtain multiple modes (if multiple modes exist), you must use a combination of other functions, as shown in the hypothetical query:
+
+  SELECT x FROM (SELECT x, COUNT(x) AS cnt1
+   FROM t GROUP BY x)
+   WHERE cnt1 =
+      (SELECT MAX(cnt2) FROM (SELECT COUNT(x) AS cnt2 FROM t GROUP BY x));
+*/
+
+SELECT my_num mode_of_numbers
+FROM
+ (SELECT my_num, count(my_num) AS cnt1 
+  FROM TEST
+  GROUP BY my_num
+ )
+WHERE cnt1 = 
+      (SELECT MAX(num_frequency) 
+       FROM
+         (SELECT count(my_num) AS num_frequency
+          FROM TEST
+          GROUP BY my_num));
