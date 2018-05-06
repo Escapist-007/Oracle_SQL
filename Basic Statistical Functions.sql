@@ -121,3 +121,48 @@ WHERE cnt1 =
          (SELECT count(my_num) AS num_frequency
           FROM TEST
           GROUP BY my_num));
+
+
+
+/*
+  Use of WITH clause - Sub-query Factoring
+*/
+
+WITH TEMP AS (
+   SELECT MY_NUM, COUNT(MY_NUM) AS NUM_FREQUENCY 
+   FROM TEST 
+   GROUP BY MY_NUM
+)
+
+SELECT MY_NUM MODE_OF_NUMBERS 
+FROM TEMP
+WHERE NUM_FREQUENCY =  (SELECT MAX(NUM_FREQUENCY) FROM TEMP );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
