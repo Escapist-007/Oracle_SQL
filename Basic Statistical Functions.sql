@@ -139,8 +139,52 @@ FROM TEMP
 WHERE NUM_FREQUENCY =  (SELECT MAX(NUM_FREQUENCY) FROM TEMP );
 
 
+/*
+      Numbers in 'test" table :  1,1,1,2,2,2,4,5,6,7,8,8, NULL
+      
+      The SD of these numbers:-
+      Sample Standard Deviation     = 2.7784342658586
+      Population Standard Deviation = 2.6601482832521
+     
+      Distinct Numbers : 1,2,4,5,6,7,8,NULL
+      Sample Standard Deviation     = 2.5634797778466
+
+      The purpose of the STDDEV() function is to find the standard deviation of a set of numbers.
+      It is a mathematical concept, which is a number that represents how much the values in a group differ from the mean value in a group.
+
+The syntax for the STDDEV function when it is used as an aggregate function is:
+
+STDDEV ( [DISTINCT | ALL] expression )
+
+Alternatively, the syntax when used as an analytical function is:
+
+STDDEV ( [DISTINCT | ALL] expression ) [OVER (analytical_clause) ]
+
+The parameters of the STDDEV function as an aggregate function are:
+
+DISTINCT|ALL (optional): Using DISTINCT means that the function will only look at unique values. Using ALL means that all values will be considered.
+expression (mandatory): The expression is the set of data or the column that is used in the STDDEV function.
+The parameters of the STDDEV function as an analytical  function are the same, but also include:
+
+analytical_clause (optional): This is the clause or logic that is used to group the values for the STDDEV function.
+
+*/
 
 
+SELECT
+  STDDEV ( MY_NUM ) STANDARD_DEVIATION
+FROM
+  TEST;
+  
+SELECT DISTINCT
+  MY_NUM DISTINCT_NUMBERS
+FROM
+  TEST;
+  
+SELECT
+  STDDEV ( DISTINCT MY_NUM ) DISTINCT_STANDARD_DEVIATION
+FROM
+  TEST;
 
 
 
