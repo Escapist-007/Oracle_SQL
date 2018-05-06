@@ -42,7 +42,8 @@ SELECT * FROM TEST;
 --  AVG(), MEDIAN() and STATS_MODE()
 
 --  NULL values are ignored by AVG(), MEDIAN() and STATS_MODE() functions.
---  Here, STATS_MODE() only returns one mode (lowest one) . So it is not true when we have two or more modes. In this case, both 1 & 2 are mode .
+--  Here, STATS_MODE() only returns one mode (lowest one) . So it is not true when we have two or more modes. 
+--  In this case, both 1 & 2 are mode .
 
 
 /*
@@ -63,7 +64,7 @@ The expr value can be any numeric data type. The MEDIAN function returns the sam
 
 If you specify the OVER clause, Oracle will work out the data type with the highest precedence and return that type.
 
- Oracle Doc: https://docs.oracle.com/cd/B19306_01/server.102/b14200/functions086.htm
+Oracle Doc: https://docs.oracle.com/cd/B19306_01/server.102/b14200/functions086.htm
 
 */
 
@@ -109,6 +110,7 @@ GROUP BY
       (SELECT MAX(cnt2) FROM (SELECT COUNT(x) AS cnt2 FROM t GROUP BY x));
 */
 
+
 SELECT my_num mode_of_numbers
 FROM
  (SELECT my_num, count(my_num) AS cnt1 
@@ -150,7 +152,8 @@ WHERE NUM_FREQUENCY =  (SELECT MAX(NUM_FREQUENCY) FROM TEMP );
       Sample Standard Deviation     = 2.5634797778466
 
       The purpose of the STDDEV() function is to find the standard deviation of a set of numbers.
-      It is a mathematical concept, which is a number that represents how much the values in a group differ from the mean value in a group.
+      It is a mathematical concept, which is a number that represents how much the values in a group differ from the mean 
+      value in a group.
 
 The syntax for the STDDEV function when it is used as an aggregate function is:
 
@@ -162,11 +165,12 @@ STDDEV ( [DISTINCT | ALL] expression ) [OVER (analytical_clause) ]
 
 The parameters of the STDDEV function as an aggregate function are:
 
-DISTINCT|ALL (optional): Using DISTINCT means that the function will only look at unique values. Using ALL means that all values will be considered.
+DISTINCT|ALL (optional): Using DISTINCT means that the function will only look at unique values. 
+Using ALL means that all values will be considered.
 expression (mandatory): The expression is the set of data or the column that is used in the STDDEV function.
 The parameters of the STDDEV function as an analytical  function are the same, but also include:
 
-analytical_clause (optional): This is the clause or logic that is used to group the values for the STDDEV function.
+Analytical_clause (optional): This is the clause or logic that is used to group the values for the STDDEV function.
 
 */
 
@@ -185,21 +189,3 @@ SELECT
   STDDEV ( DISTINCT MY_NUM ) DISTINCT_STANDARD_DEVIATION
 FROM
   TEST;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
