@@ -3,25 +3,27 @@
 */
 
 -- use of CASE expression and DECODE() function
-
 -- The CASE expression complies with the ANSI SQL. The DECODE function is specific to Oracle syntax. 
 
-/*    ****** CASE EXPRESSION **************  
 
- 
+/*           
+           CASE EXPRESSION 
+        ======================
+        
   CASE expr WHEN comparison_expr1 THEN return_expr1
             [WHEN comparison_expr2 THEN return_expr2
              WHEN comparison_exprn THEN return_exprn
              ELSE else_expr] 
   END
-*/
+  
 
-/*
   Oracle server searches for the first WHEN ... THEN pair for which expr is equal to comparison_expr and returns return_expr. 
-  If none of the WHEN ... THEN pairs meet this condition, and if an ELSE clause exists, then the Oracle server returns else_expr. 
+  If none of the WHEN ... THEN pairs meet this condition, and if an ELSE clause exists, then the Oracle server returns 
+  else_expr. 
   
   Otherwise, the Oracle server returns a null. You cannot specify the literal NULL for all the return_exprs and the else_expr. 
-  All of the expressions ( expr, comparison_expr, and return_expr) must be of the same data type, which can be CHAR, VARCHAR2, NCHAR, or NVARCHAR2.
+  All of the expressions ( expr, comparison_expr, and return_expr) must be of the same data type, which can be CHAR, VARCHAR2, 
+  NCHAR, or NVARCHAR2.
 
 */
 
