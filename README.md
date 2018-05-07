@@ -1,7 +1,7 @@
 
 This repository contains `SQL scripts` related to some common Oracle SQL functions.
 
-* **Oracle Analytic Functions.sql**<br/> 
+* **Explore Analytic Functions.sql**<br/> 
   > Explore different `Analytic Functions` of Oracle for Data Analysis.
 
 * **Basic Statistical Functions.sql**<br/>
