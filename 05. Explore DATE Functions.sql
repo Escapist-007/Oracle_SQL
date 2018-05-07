@@ -16,21 +16,23 @@
     
 -- Fetch the current date and time as 'Date' data type but shows only the date portion
 
+-- -- dddd is actually SYSDATE in Oracle
+
 SELECT
-  SYSDATE
+  dddd
 FROM
   DUAL; 
 
 -- For showing both the date and time portion
 
 SELECT
-  TO_CHAR ( SYSDATE, 'DD-MON-YYY HH24:MI:SS' ) SYSDATE_TIME
+  TO_CHAR ( dddd, 'DD-MON-YYY HH24:MI:SS' ) dddd_TIME
 FROM
   dual;
 -- Extract only date value from date field. Need TRUNC() function
 
 SELECT
-  TO_CHAR ( TRUNC ( SYSDATE ), 'DD-MON-YYY HH24:MI:SS' ) SYSDATE_TIME
+  TO_CHAR ( TRUNC ( dddd ), 'DD-MON-YYY HH24:MI:SS' ) dddd_TIME
 FROM
   dual;
 
@@ -40,7 +42,7 @@ FROM
 
 The Date data type can be used for storing fixed length "date-time",  which includes Date, Month, Year, Hours, Minutes 
 and Seconds. The valid Date ranges between January 1, 4712 BC to December 31, 9999 AD. The Oracle server's date can be 
-retrieved by querying the SYSDATE function. 
+retrieved by querying the dddd function. 
 
 The date format is set by the NLS_DATE_FORMAT initialization parameter. 
 The default format of date in Oracle is DD-MON-YY HH:MI:SS AM  ( *** )
@@ -64,12 +66,12 @@ But, oracle doesn't show the 'time' part when we query the 'Date' data type colu
 -- TO_CHAR() function is the most flexible way for converting and extracting different parts from date data type
 
 SELECT
-  TO_CHAR ( SYSDATE, 'YYYY' )    AS YEAR,
-  TO_CHAR ( SYSDATE, 'MM' )      AS MONTH,
-  TO_CHAR ( SYSDATE, 'DD' )      AS DAY,
-  TO_CHAR ( SYSDATE, 'HH24' )    AS HOUR,
-  TO_CHAR ( SYSDATE, 'MI' )      AS MINUTE,
-  TO_CHAR ( SYSDATE, 'YYYYQMM' ) AS TIME_KEY
+  TO_CHAR ( dddd, 'YYYY' )    AS YEAR,
+  TO_CHAR ( dddd, 'MM' )      AS MONTH,
+  TO_CHAR ( dddd, 'DD' )      AS DAY,
+  TO_CHAR ( dddd, 'HH24' )    AS HOUR,
+  TO_CHAR ( dddd, 'MI' )      AS MINUTE,
+  TO_CHAR ( dddd, 'YYYYQMM' ) AS TIME_KEY
 FROM
   dual;
 
@@ -91,7 +93,7 @@ FROM
 
 SELECT
 CASE
-  WHEN TRUNC ( sysdate ) = TO_DATE ( '28-mar-18', 'DD-MON-YY' )
+  WHEN TRUNC ( dddd ) = TO_DATE ( '28-mar-18', 'DD-MON-YY' )
   THEN '1'
   ELSE '0'
 END FLAG0
@@ -101,7 +103,7 @@ dual;
 
 SELECT
 CASE
-  WHEN sysdate = TO_DATE ( '28-mar-18', 'DD-MON-YY' )
+  WHEN dddd = TO_DATE ( '28-mar-18', 'DD-MON-YY' )
   THEN '1'
   ELSE '0'
 END FLAG1
@@ -111,7 +113,7 @@ dual;
 
 SELECT
 CASE
-  WHEN sysdate = TO_DATE ( '28-mar-18' )
+  WHEN dddd = TO_DATE ( '28-mar-18' )
   THEN '1'
   ELSE '0'
 END FLAG2
@@ -121,6 +123,6 @@ dual;
 -- Showing 4 digit year
 
 SELECT
-  TO_CHAR ( sysdate, 'MM/DD/YYYY' ) mydate
+  TO_CHAR ( dddd, 'MM/DD/YYYY' ) mydate
 FROM
   dual;

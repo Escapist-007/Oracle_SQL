@@ -39,6 +39,8 @@
   
 */
 
+-- Using CASE expression
+
 SELECT 
      LAST_NAME, 
      JOB_ID, 
@@ -56,3 +58,23 @@ SELECT
           ELSE 'Excellent' 
       END) QUALIFIED_SALARY
 FROM HR.EMPLOYEES;
+
+-- using DECODE Function
+
+SELECT 
+      LAST_NAME, 
+      JOB_ID, 
+      SALARY,
+      DECODE(JOB_ID, 
+                     'IT_PROG',  1.10*SALARY,
+                     'ST_CLERK', 1.15*SALARY,
+                     'SA_REP',   1.20*SALARY,
+                                 SALARY)  REVISED_SALARY,
+      DECODE(TRUNC(SALARY/5000, 0),
+                      0, 'Low',
+                      1, 'Medium',
+                      2, 'Good',
+                      3, 'Good',
+                         'Excellent') QUALIFIED_SALARY
+FROM  HR.EMPLOYEES;
+
