@@ -2,6 +2,8 @@
    Author  : Md Moniruzzaman Monir
 */
 
+-- NB: Please see the README file for knowing the meaning of "currDATE" & "connBY"
+
 -- TIME DIMENSION CREATION 
   
   

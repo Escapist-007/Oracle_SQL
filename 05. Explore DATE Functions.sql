@@ -2,6 +2,7 @@
    Author : Md Moniruzzaman Monir
    Email  : moniruzzaman.023.bd.buet@gmail.com
 
+   NB: Please see the README file for knowing the meaning of "currDATE"
 
        Basic Functions for storing Date value
   ===================================================
@@ -23,7 +24,7 @@
 -- For showing both the date and time portion
 
   SELECT
-    TO_CHAR (currDate , 'DD-MON-YYY HH24:MI:SS') currDate _TIME
+    TO_CHAR (currDate , 'DD-MON-YYY HH24:MI:SS') currDate_TIME
   FROM
     dual;
   
@@ -31,27 +32,27 @@
 -- Extract only date value from date field. Need TRUNC() function
 
   SELECT
-    TO_CHAR ( TRUNC (currDate  ), 'DD-MON-YYY HH24:MI:SS') currDate _TIME
+    TO_CHAR ( TRUNC (currDate), 'DD-MON-YYY HH24:MI:SS') currDate_TIME
   FROM
     dual;
 
 
 /*
-       ---  Date ---
+       ---  Date & Timestamp ---
        
-The Date data type can be used for storing fixed length "date-time",  which includes Date, Month, Year, Hours, Minutes and Seconds. 
-The Oracle server's date can be retrieved by querying the SYSDATE function. 
+The Date data type can be used for storing fixed length "date-time",  which includes Date, Month, Year, Hours, Minutes and Seconds.
+The Timestamp data type is an extension of the Date data type with an additional Fraction for a precise date storage and retrieval.
+The date and Timestamp format is set by the NLS_DATE_FORMAT initialization parameter. 
+The default format of date  is DD-MON-YY HH:MI:SS AM  
+                & Timestamp is DD-MON-YY HH:MI:SS:FF9 AM
 
-The date format is set by the NLS_DATE_FORMAT initialization parameter. The default format of date in Oracle is 
-DD-MON-YY HH:MI:SS AM  ( *** )
-
-In 'Date' data type, there are two parts : Date part & Time part. But, oracle doesn't show the 'time' part when we query 
-the 'Date' data type column. It only shows the date portion.
+In 'Date' data type, there are two parts : Date part & Time part. But, oracle doesn't show the 'time' part when we query the 'Date' 
+data type column. It only shows the date portion.
   
 */
 
 
--- TO_CHAR() function is the most flexible way for converting and extracting different parts from date data type
+-- TO_CHAR() function is the most flexible way for converting and extracting different parts from date data type.
 
   SELECT
     TO_CHAR ( currDate , 'YYYY')     AS YEAR,
@@ -63,19 +64,12 @@ the 'Date' data type column. It only shows the date portion.
   FROM
     dual;
 
-
-
 /*
-     ---  Timestamp  ---
-
-The Timestamp data type is an extension of the Date data type with an additional Fraction for a precise date storage and retrieval. 
-The Oracle server's Timestamp can be retrieved by querying the SYSTIMESTAMP function. The Timestamp format is set by the 
-NLS_TIMESTAMP_FORMAT initialization parameter. The default format of Timestamp in Oracle is DD-MON-YY HH:MI:SS:FF9 AM ( *** )
-       
+      
 --  Correctly handle 'DATE' data type in queries for filtering using date type column ***
 --  Problem Link : https://stackoverflow.com/questions/4876771/how-to-correctly-handle-dates-in-queries-constraints
 
- As oracle does not show the 'time part' of DATE data type, so it is not true that two date type columns are equal if they show same 
+As oracle does not show the 'time part' of DATE data type, so it is not true that two date type columns are equal if they show same 
  value. Because the date portion may be same which is showing but the time portion is different. This creates problems when we filter 
  using date type column.
  
@@ -115,6 +109,6 @@ NLS_TIMESTAMP_FORMAT initialization parameter. The default format of Timestamp i
 -- Showing 4 digit year
 
   SELECT
-    TO_CHAR ( currDate , 'MM/DD/YYYY' ) mydate
+    TO_CHAR ( currDate, 'MM/DD/YYYY' ) mydate
   FROM
     dual;
