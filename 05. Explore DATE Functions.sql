@@ -9,32 +9,33 @@
   The Date and Timestamp data types are used for storing and manipulating the "date and time" values. These are quite 
   complicated compared to the other data types as they require a special format for storage and processing.
   
-  Oracle allows us to perform arithmetic operations on the Date and the Timestamp data types between a Date/ Timestamp 
-  variable and an integer or between two Dates/ Timestamp variables.
+  Oracle allows us to perform arithmetic operations on the Date and Timestamp data types.
 
 */
     
 -- Fetch the current date and time as 'Date' data type but shows only the date portion
 
--- -- dddd is actually SYSDATE in Oracle
 
-SELECT
-  dddd
-FROM
-  DUAL; 
+  SELECT
+    SYSDATE
+  FROM
+    DUAL; 
+  
 
 -- For showing both the date and time portion
 
-SELECT
-  TO_CHAR ( dddd, 'DD-MON-YYY HH24:MI:SS' ) dddd_TIME
-FROM
-  dual;
+  SELECT
+    TO_CHAR (SYSDATE, 'DD-MON-YYY HH24:MI:SS') SYSDATE_TIME
+  FROM
+    dual;
+  
+  
 -- Extract only date value from date field. Need TRUNC() function
 
-SELECT
-  TO_CHAR ( TRUNC ( dddd ), 'DD-MON-YYY HH24:MI:SS' ) dddd_TIME
-FROM
-  dual;
+  SELECT
+    TO_CHAR ( TRUNC (SYSDATE ), 'DD-MON-YYY HH24:MI:SS') SYSDATE_TIME
+  FROM
+    dual;
 
 
 /*
@@ -42,7 +43,7 @@ FROM
 
 The Date data type can be used for storing fixed length "date-time",  which includes Date, Month, Year, Hours, Minutes 
 and Seconds. The valid Date ranges between January 1, 4712 BC to December 31, 9999 AD. The Oracle server's date can be 
-retrieved by querying the dddd function. 
+retrieved by querying the SYSDATE function. 
 
 The date format is set by the NLS_DATE_FORMAT initialization parameter. 
 The default format of date in Oracle is DD-MON-YY HH:MI:SS AM  ( *** )
@@ -65,15 +66,15 @@ But, oracle doesn't show the 'time' part when we query the 'Date' data type colu
 
 -- TO_CHAR() function is the most flexible way for converting and extracting different parts from date data type
 
-SELECT
-  TO_CHAR ( dddd, 'YYYY' )    AS YEAR,
-  TO_CHAR ( dddd, 'MM' )      AS MONTH,
-  TO_CHAR ( dddd, 'DD' )      AS DAY,
-  TO_CHAR ( dddd, 'HH24' )    AS HOUR,
-  TO_CHAR ( dddd, 'MI' )      AS MINUTE,
-  TO_CHAR ( dddd, 'YYYYQMM' ) AS TIME_KEY
-FROM
-  dual;
+  SELECT
+    TO_CHAR ( SYSDATE, 'YYYY')    AS YEAR,
+    TO_CHAR ( SYSDATE, 'MM' )      AS MONTH,
+    TO_CHAR ( SYSDATE, 'DD' )      AS DAY,
+    TO_CHAR ( SYSDATE, 'HH24' )    AS HOUR,
+    TO_CHAR ( SYSDATE, 'MI' )      AS MINUTE,
+    TO_CHAR ( SYSDATE, 'YYYYQMM' ) AS TIME_KEY
+  FROM
+    dual;
 
 
 --  Correctly handle 'DATE' data type in queries for filtering using date type column ***
@@ -91,38 +92,38 @@ FROM
 
 -- Here, we have to put the current date in lieu of '28-mar-18'
 
-SELECT
-CASE
-  WHEN TRUNC ( dddd ) = TO_DATE ( '28-mar-18', 'DD-MON-YY' )
-  THEN '1'
-  ELSE '0'
-END FLAG0
-FROM
-dual;
-
-
-SELECT
-CASE
-  WHEN dddd = TO_DATE ( '28-mar-18', 'DD-MON-YY' )
-  THEN '1'
-  ELSE '0'
-END FLAG1
-FROM
-dual;
-
-
-SELECT
-CASE
-  WHEN dddd = TO_DATE ( '28-mar-18' )
-  THEN '1'
-  ELSE '0'
-END FLAG2
-FROM
-dual;
+  SELECT
+  CASE
+    WHEN TRUNC ( SYSDATE ) = TO_DATE ( '28-mar-18', 'DD-MON-YY' )
+    THEN '1'
+    ELSE '0'
+  END FLAG0
+  FROM
+  dual;
+  
+  
+  SELECT
+  CASE
+    WHEN SYSDATE = TO_DATE ( '28-mar-18', 'DD-MON-YY' )
+    THEN '1'
+    ELSE '0'
+  END FLAG1
+  FROM
+  dual;
+  
+  
+  SELECT
+  CASE
+    WHEN SYSDATE = TO_DATE ( '28-mar-18' )
+    THEN '1'
+    ELSE '0'
+  END FLAG2
+  FROM
+  dual;
 
 -- Showing 4 digit year
 
-SELECT
-  TO_CHAR ( dddd, 'MM/DD/YYYY' ) mydate
-FROM
-  dual;
+  SELECT
+    TO_CHAR ( SYSDATE, 'MM/DD/YYYY' ) mydate
+  FROM
+    dual;

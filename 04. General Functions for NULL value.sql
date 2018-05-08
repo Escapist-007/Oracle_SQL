@@ -13,23 +13,24 @@
 
         NVL (expr1, expr2)
         
-In the syntax:
-  • expr1 is the source value or expression that may contain a null
-  • expr2 is the target value for converting the null
-  
-We can use the NVL function to convert any data type, but the return value is always the same as the data type of expr1.
+  In the syntax:
+    • expr1 is the source value or expression that may contain a null
+    • expr2 is the target value for converting the null
+    
+  We can use the NVL function to convert any data type, but the return value is always the same as the data type of expr1.
+
 */
 
 
-SELECT
-  LAST_NAME,
-  SALARY,
-  NVL ( HIRE_DATE, '01-JAN-97' ) HIRE_DATE,
-  NVL ( JOB_ID, 'No Job Yet' )   JOB_ID,
-  NVL ( COMMISSION_PCT, 0 ),
-  ( SALARY * 12 ) + ( SALARY * 12 * NVL ( COMMISSION_PCT, 0 ) ) ANN_SAL
-FROM
-  HR.EMPLOYEES;
+  SELECT
+    LAST_NAME,
+    SALARY,
+    NVL ( HIRE_DATE, '01-JAN-97' ) HIRE_DATE,
+    NVL ( JOB_ID, 'No Job Yet' )   JOB_ID,
+    NVL ( COMMISSION_PCT, 0 ),
+    ( SALARY * 12 ) + ( SALARY * 12 * NVL ( COMMISSION_PCT, 0 ) ) ANN_SAL
+  FROM
+    HR.EMPLOYEES;
   
   
 /*
@@ -46,16 +47,16 @@ FROM
   The argument expr1 can have any data type. The arguments expr2 and expr3 can have any data types except LONG. 
 */
 
-SELECT
-  DEPARTMENT_ID,
-  LAST_NAME,
-  SALARY,
-  COMMISSION_PCT,
-  NVL2 ( COMMISSION_PCT, 'SAL+COMM', 'SAL' ) INCOME
-FROM
-  HR.EMPLOYEES
-WHERE
-  DEPARTMENT_ID IN ( 50, 80 ) ;
+  SELECT
+    DEPARTMENT_ID,
+    LAST_NAME,
+    SALARY,
+    COMMISSION_PCT,
+    NVL2 ( COMMISSION_PCT, 'SAL+COMM', 'SAL' ) INCOME
+  FROM
+    HR.EMPLOYEES
+  WHERE
+    DEPARTMENT_ID IN ( 50, 80 ) ;
   
 /*
   Syntax: NULLIF (expr1, expr2)
@@ -70,23 +71,23 @@ WHERE
    Here, If expr1 is NULL then the function will return NULL
 */
 
-SELECT
-  FIRST_NAME,
-  LENGTH ( FIRST_NAME ) "expr1",
-  LAST_NAME,
-  LENGTH ( LAST_NAME ) "expr2",
-  NULLIF ( LENGTH ( FIRST_NAME ), LENGTH ( LAST_NAME ) ) RESULT
-FROM
-  HR.EMPLOYEES;
-
-SELECT
-  FIRST_NAME
-  ||' '
-  || LAST_NAME ENAME,
-  COMMISSION_PCT,
-  NULLIF ( COMMISSION_PCT, 0 )
-FROM
-  HR.EMPLOYEES;
+  SELECT
+    FIRST_NAME,
+    LENGTH ( FIRST_NAME ) "expr1",
+    LAST_NAME,
+    LENGTH ( LAST_NAME ) "expr2",
+    NULLIF ( LENGTH ( FIRST_NAME ), LENGTH ( LAST_NAME ) ) RESULT
+  FROM
+    HR.EMPLOYEES;
+  
+  SELECT
+    FIRST_NAME
+    ||' '
+    || LAST_NAME ENAME,
+    COMMISSION_PCT,
+    NULLIF ( COMMISSION_PCT, 0 )
+  FROM
+    HR.EMPLOYEES;
   
   
 /*
@@ -106,14 +107,14 @@ FROM
 
     /* TO_CHAR function is applied so that all expressions are of the same data type. */
 
-SELECT
-  LAST_NAME,
-  EMPLOYEE_ID,
-  COMMISSION_PCT,
-  MANAGER_ID,
-  COALESCE ( TO_CHAR ( COMMISSION_PCT ), TO_CHAR ( MANAGER_ID ),'No commission and no manager' ) COALESCE_OUPUT
-FROM
-  HR.EMPLOYEES;
+  SELECT
+    LAST_NAME,
+    EMPLOYEE_ID,
+    COMMISSION_PCT,
+    MANAGER_ID,
+    COALESCE ( TO_CHAR ( COMMISSION_PCT ), TO_CHAR ( MANAGER_ID ),'No commission and no manager' ) COALESCE_OUPUT
+  FROM
+    HR.EMPLOYEES;
 
 /* 
   For the employees who do not get any commission, your organization wants to give a salary increment of $2,000 and for employees who get commission, 
@@ -121,13 +122,13 @@ FROM
 */
 
 
-SELECT
-  LAST_NAME,
-  SALARY,
-  COMMISSION_PCT,
-  COALESCE ( ( SALARY + ( COMMISSION_PCT * SALARY ) ), SALARY + 2000, SALARY ) "New Salary"
-FROM
-  HR.EMPLOYEES;
+  SELECT
+    LAST_NAME,
+    SALARY,
+    COMMISSION_PCT,
+    COALESCE ( ( SALARY + ( COMMISSION_PCT * SALARY ) ), SALARY + 2000, SALARY ) "New Salary"
+  FROM
+    HR.EMPLOYEES;
   
 
   /*
@@ -138,11 +139,11 @@ FROM
   
   */
 
-SELECT 'AAA' FROM dual
-  UNION ALL
-SELECT 'BBB'FROM dual
-  UNION ALL
-SELECT 'CCC' FROM dual;
+  SELECT 'AAA' FROM dual
+    UNION ALL
+  SELECT 'BBB'FROM dual
+    UNION ALL
+  SELECT 'CCC' FROM dual;
 
 
 SELECT * 
